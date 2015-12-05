@@ -64,12 +64,15 @@ public class EvoSim extends Application {
 		});
 		
 		EventHandler<ActionEvent> tick = e -> {
-			root.getChildren().clear();
-			root.getChildren().add(dirtButton);
-			root.getChildren().add(stoneButton);
-			root.getChildren().add(waterButton);
+			root.getChildren().removeIf(a -> {
+				return a.getId()!= null && a.getId().equals("toDelete");
+			});
 			tiles.draw(root);
 		};
+		
+		root.getChildren().add(dirtButton);
+		root.getChildren().add(stoneButton);
+		root.getChildren().add(waterButton);
 		
 		final Timeline loop = new Timeline(new KeyFrame(Duration.millis(17), tick));
 		primaryStage.setScene(scene);
