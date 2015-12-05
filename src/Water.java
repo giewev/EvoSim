@@ -1,11 +1,9 @@
-import javafx.scene.shape.*;
-import javafx.scene.paint.*;
-
 import javafx.scene.Group;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
-public class Dirt extends Terrain {
-	
-	public Dirt(int x, int y, int newWidth, int newHeight){
+public class Water extends Terrain{
+	public Water(int x, int y, int newWidth, int newHeight){
 		this.X = x;
 		this.Y = y;
 		this.width = newWidth;
@@ -17,7 +15,7 @@ public class Dirt extends Terrain {
 		Rectangle thisSquare = new Rectangle(this.X, this.Y, this.width, this.height);
 		thisSquare.setStroke(Color.BLACK);
 		thisSquare.setStrokeWidth(0.2);
-		thisSquare.setFill(Color.SADDLEBROWN);
+		thisSquare.setFill(Color.BLUE);
 		
 		screen.getChildren().add(thisSquare);
 	}
