@@ -1,7 +1,10 @@
+import java.util.ArrayList;
+
 import javafx.scene.Group;
 
 public class Map {
 	public Terrain[][] tiles;
+	public ArrayList<Food> foodPellets = new ArrayList<Food>();
 	public int width;
 	public int height;
 	public int tileWidth;
@@ -22,6 +25,18 @@ public class Map {
 				this.tiles[i][j].draw(screen);
 			}
 		}
+		
+		for(Food pellet : this.foodPellets){
+			pellet.draw(screen);
+		}
+	}
+	
+	public void layer(){
+		for(int i = 0; i < this.width; i++){
+			for(int j = 0; j < this.height; j++){
+				this.tiles[i][j].tile.toBack();
+			}
+		}
 	}
 	
 	public void resetStone(){
@@ -30,6 +45,11 @@ public class Map {
 				this.setTile(new Stone(i * this.tileWidth, j * this.tileHeight, this.tileWidth, this.tileHeight));
 			}
 		}
+		
+		for(Food pellet : this.foodPellets){
+			pellet.pellet.setId("toDelete");
+		}
+		this.foodPellets.clear();
 	}
 	
 	public void setTile(Terrain newTile){
@@ -41,5 +61,9 @@ public class Map {
 		
 		if(this.tiles[x][y] != null) this.tiles[x][y].tile.setId("toDelete");
 		this.tiles[x][y] = newTile;
+	}
+	
+	public void addFood(Food newFood){
+		this.foodPellets.add(newFood);
 	}
 }

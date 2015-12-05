@@ -1,6 +1,9 @@
 import javafx.animation.Timeline;
 
 import javafx.scene.shape.Rectangle;
+
+import java.util.ArrayList;
+
 import javafx.animation.*;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -8,6 +11,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -33,13 +37,18 @@ public class EvoSim extends Application {
 		
 		// Defines how the GUI handles a mouse click or drag
 		EventHandler<MouseEvent> mouseHandler = e -> {
-			int xIndex = (int)(e.getX() / tileSize);
-			int yIndex = (int)(e.getY() / tileSize);
-			
-			for(int x = xIndex - 1; x <= xIndex + 1; x++){
-				for(int y = yIndex - 1; y <= yIndex + 1; y++){
-					tiles.setTile(Terrain.construct(currentBrush, x * tileSize, y * tileSize, tileSize, tileSize));
+			if(e.getButton() == MouseButton.PRIMARY){
+				int xIndex = (int)(e.getX() / tileSize);
+				int yIndex = (int)(e.getY() / tileSize);
+				
+				for(int x = xIndex - 1; x <= xIndex + 1; x++){
+					for(int y = yIndex - 1; y <= yIndex + 1; y++){
+						tiles.setTile(Terrain.construct(currentBrush, x * tileSize, y * tileSize, tileSize, tileSize));
+					}
 				}
+			}
+			else if(e.getButton() == MouseButton.SECONDARY){
+				tiles.addFood(new Food((int)e.getX(), (int)e.getY(), 5));
 			}
 		};
 		

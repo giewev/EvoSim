@@ -15,6 +15,7 @@ public class Water extends Terrain{
 	public void draw(Group screen) {
 		if(this.tile.getId() != "toDraw") return;
 		screen.getChildren().add(this.tile);
+		this.tile.toBack();
 		this.tile.setId("Tile");
 	}
 }
