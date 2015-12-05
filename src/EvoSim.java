@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -45,22 +46,36 @@ public class EvoSim extends Application {
 		scene.setOnMouseClicked(mouseHandler);
 		scene.setOnMouseDragged(mouseHandler);
 		
-		Rectangle dirtButton = new Rectangle(mapWidth * tileSize + 5, 15, 50, 50);
+		Rectangle dirtButton = new Rectangle(mapWidth * tileSize + 30, 15, 50, 50);
 		dirtButton.setFill(Color.SADDLEBROWN);
 		dirtButton.setOnMousePressed(e -> {
 			currentBrush = "Dirt";
 		});
 		
-		Rectangle stoneButton = new Rectangle(mapWidth * tileSize + 60, 15, 50, 50);
+		Rectangle stoneButton = new Rectangle(mapWidth * tileSize + 90, 15, 50, 50);
 		stoneButton.setFill(Color.GREY);
 		stoneButton.setOnMousePressed(e -> {
 			currentBrush = "Stone";
 		});
 		
-		Rectangle waterButton = new Rectangle(mapWidth * tileSize + 115, 15, 50, 50);
+		Rectangle waterButton = new Rectangle(mapWidth * tileSize + 30, 80, 50, 50);
 		waterButton.setFill(Color.BLUE);
 		waterButton.setOnMousePressed(e -> {
 			currentBrush = "Water";
+		});
+		
+		Rectangle grassButton = new Rectangle(mapWidth * tileSize + 90, 80, 50, 50);
+		grassButton.setFill(Color.GREEN);
+		grassButton.setOnMousePressed(e -> {
+			currentBrush = "Grass";
+		});
+		
+		Button resetButton = new Button();
+		resetButton.setLayoutX(mapWidth * tileSize + 40);
+		resetButton.setLayoutY(160);
+		resetButton.setText("Reset Map");
+		resetButton.setOnMouseClicked(e -> {
+			tiles.resetStone();
 		});
 		
 		EventHandler<ActionEvent> tick = e -> {
@@ -73,6 +88,8 @@ public class EvoSim extends Application {
 		root.getChildren().add(dirtButton);
 		root.getChildren().add(stoneButton);
 		root.getChildren().add(waterButton);
+		root.getChildren().add(grassButton);
+		root.getChildren().add(resetButton);
 		
 		final Timeline loop = new Timeline(new KeyFrame(Duration.millis(17), tick));
 		primaryStage.setScene(scene);

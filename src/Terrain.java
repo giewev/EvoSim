@@ -10,6 +10,7 @@ public abstract class Terrain {
 		if(type.equals("Dirt")) return new Dirt(x, y, newWidth, newHeight);
 		if(type.equals("Stone")) return new Stone(x, y, newWidth, newHeight);
 		if(type.equals("Water")) return new Water(x, y, newWidth, newHeight);
+		if(type.equals("Grass")) return new Grass(x, y, newWidth, newHeight);
 		
 		return null;
 	}
