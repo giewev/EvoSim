@@ -1,9 +1,5 @@
 import javafx.animation.Timeline;
-
 import javafx.scene.shape.Rectangle;
-
-import java.util.ArrayList;
-
 import javafx.animation.*;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -24,7 +20,7 @@ public class EvoSim extends Application {
 	
 	static String currentBrush = "Dirt";
 	
-	Map tiles = new Map(mapWidth, mapHeight, tileSize);
+	static Map tiles = new Map(mapWidth, mapHeight, tileSize);
 	
 	public static void main(String[] args) {
 		launch(args);
@@ -55,37 +51,7 @@ public class EvoSim extends Application {
 		scene.setOnMouseClicked(mouseHandler);
 		scene.setOnMouseDragged(mouseHandler);
 		
-		Rectangle dirtButton = new Rectangle(mapWidth * tileSize + 30, 15, 50, 50);
-		dirtButton.setFill(Color.SADDLEBROWN);
-		dirtButton.setOnMousePressed(e -> {
-			currentBrush = "Dirt";
-		});
-		
-		Rectangle stoneButton = new Rectangle(mapWidth * tileSize + 90, 15, 50, 50);
-		stoneButton.setFill(Color.GREY);
-		stoneButton.setOnMousePressed(e -> {
-			currentBrush = "Stone";
-		});
-		
-		Rectangle waterButton = new Rectangle(mapWidth * tileSize + 30, 80, 50, 50);
-		waterButton.setFill(Color.BLUE);
-		waterButton.setOnMousePressed(e -> {
-			currentBrush = "Water";
-		});
-		
-		Rectangle grassButton = new Rectangle(mapWidth * tileSize + 90, 80, 50, 50);
-		grassButton.setFill(Color.GREEN);
-		grassButton.setOnMousePressed(e -> {
-			currentBrush = "Grass";
-		});
-		
-		Button resetButton = new Button();
-		resetButton.setLayoutX(mapWidth * tileSize + 40);
-		resetButton.setLayoutY(160);
-		resetButton.setText("Reset Map");
-		resetButton.setOnMouseClicked(e -> {
-			tiles.resetStone();
-		});
+		drawControlMenu(root);
 		
 		EventHandler<ActionEvent> tick = e -> {
 			root.getChildren().removeIf(a -> {
@@ -94,16 +60,56 @@ public class EvoSim extends Application {
 			tiles.draw(root);
 		};
 		
-		root.getChildren().add(dirtButton);
-		root.getChildren().add(stoneButton);
-		root.getChildren().add(waterButton);
-		root.getChildren().add(grassButton);
-		root.getChildren().add(resetButton);
-		
 		final Timeline loop = new Timeline(new KeyFrame(Duration.millis(17), tick));
 		primaryStage.setScene(scene);
 		primaryStage.show();
 		loop.setCycleCount(Timeline.INDEFINITE);
         loop.play();
+	}
+	
+	
+	public static void drawControlMenu(Group screen){
+		Rectangle dirtButton = new Rectangle(mapWidth * tileSize + 30, 15, 50, 50);
+		dirtButton.setFill(Color.SADDLEBROWN);
+		dirtButton.setId("controlMenu");
+		dirtButton.setOnMousePressed(e -> {
+			currentBrush = "Dirt";
+		});
+		
+		Rectangle stoneButton = new Rectangle(mapWidth * tileSize + 90, 15, 50, 50);
+		stoneButton.setFill(Color.GREY);
+		stoneButton.setId("controlMenu");
+		stoneButton.setOnMousePressed(e -> {
+			currentBrush = "Stone";
+		});
+		
+		Rectangle waterButton = new Rectangle(mapWidth * tileSize + 30, 80, 50, 50);
+		waterButton.setFill(Color.BLUE);
+		waterButton.setId("controlMenu");
+		waterButton.setOnMousePressed(e -> {
+			currentBrush = "Water";
+		});
+		
+		Rectangle grassButton = new Rectangle(mapWidth * tileSize + 90, 80, 50, 50);
+		grassButton.setFill(Color.GREEN);
+		grassButton.setId("controlMenu");
+		grassButton.setOnMousePressed(e -> {
+			currentBrush = "Grass";
+		});
+		
+		Button resetButton = new Button();
+		resetButton.setLayoutX(mapWidth * tileSize + 40);
+		resetButton.setLayoutY(160);
+		resetButton.setText("Reset Map");
+		resetButton.setId("controlMenu");
+		resetButton.setOnMouseClicked(e -> {
+			tiles.resetStone();
+		});
+		
+		screen.getChildren().add(dirtButton);
+		screen.getChildren().add(stoneButton);
+		screen.getChildren().add(waterButton);
+		screen.getChildren().add(grassButton);
+		screen.getChildren().add(resetButton);
 	}
 }
