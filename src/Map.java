@@ -5,6 +5,7 @@ import javafx.scene.Group;
 public class Map {
 	public Terrain[][] tiles;
 	public ArrayList<Food> foodPellets = new ArrayList<Food>();
+	public ArrayList<Animal> animals = new ArrayList<Animal>();
 	public int width;
 	public int height;
 	public int tileWidth;
@@ -19,6 +20,12 @@ public class Map {
 		this.resetStone();
 	}
 	
+	public void tick(){
+		for(Animal animal : animals){
+			animal.tick();
+		}
+	}
+	
 	public void draw(Group screen){
 		for(int i = 0; i < this.width; i++){
 			for(int j = 0; j < this.height; j++){
@@ -28,6 +35,10 @@ public class Map {
 		
 		for(Food pellet : this.foodPellets){
 			pellet.draw(screen);
+		}
+		
+		for(Animal animal : this.animals){
+			animal.draw(screen);
 		}
 	}
 	
@@ -50,6 +61,11 @@ public class Map {
 			pellet.pellet.setId("toDelete");
 		}
 		this.foodPellets.clear();
+		
+		for(Animal animal : this.animals){
+			animal.body.setId("toDelete");
+		}
+		this.animals.clear();
 	}
 	
 	public void setTile(Terrain newTile){
@@ -65,5 +81,9 @@ public class Map {
 	
 	public void addFood(Food newFood){
 		this.foodPellets.add(newFood);
+	}
+	
+	public void addAnimal(Animal newAnimal){
+		this.animals.add(newAnimal);
 	}
 }

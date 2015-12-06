@@ -30,6 +30,7 @@ public class EvoSim extends Application {
 	public void start(Stage primaryStage) {
 		Group root = new Group();
 		Scene scene = new Scene(root, mapWidth * tileSize + 200, mapHeight * tileSize);
+		Animal.setGameCoordinates(0, 0, mapWidth * tileSize, mapHeight * tileSize);
 		
 		// Defines how the GUI handles a mouse click or drag
 		EventHandler<MouseEvent> mouseHandler = e -> {
@@ -46,6 +47,9 @@ public class EvoSim extends Application {
 			else if(e.getButton() == MouseButton.SECONDARY){
 				tiles.addFood(new Food((int)e.getX(), (int)e.getY(), 5));
 			}
+			else{
+				tiles.addAnimal(new Animal((int)e.getX(), (int)e.getY(), 10, 5));
+			}
 		};
 		
 		scene.setOnMouseClicked(mouseHandler);
@@ -57,16 +61,16 @@ public class EvoSim extends Application {
 			root.getChildren().removeIf(a -> {
 				return a.getId()!= null && a.getId().equals("toDelete");
 			});
+			tiles.tick();
 			tiles.draw(root);
 		};
 		
-		final Timeline loop = new Timeline(new KeyFrame(Duration.millis(17), tick));
+		final Timeline loop = new Timeline(new KeyFrame(Duration.millis(33), tick));
 		primaryStage.setScene(scene);
 		primaryStage.show();
 		loop.setCycleCount(Timeline.INDEFINITE);
         loop.play();
 	}
-	
 	
 	public static void drawControlMenu(Group screen){
 		Rectangle dirtButton = new Rectangle(mapWidth * tileSize + 30, 15, 50, 50);
