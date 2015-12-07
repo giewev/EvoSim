@@ -20,12 +20,14 @@ public class Map {
 		this.reset("Stone");
 	}
 	
+	// Moves the animals according to their internal logic
 	public void tick(){
 		for(Animal animal : animals){
 			animal.tick();
 		}
 	}
 	
+	// Draws all of the game items if they have not already been drawn
 	public void draw(Group screen){
 		for(int i = 0; i < this.width; i++){
 			for(int j = 0; j < this.height; j++){
@@ -42,6 +44,7 @@ public class Map {
 		}
 	}
 	
+	// Moves the map tiles to the back
 	public void layer(){
 		for(int i = 0; i < this.width; i++){
 			for(int j = 0; j < this.height; j++){
@@ -50,6 +53,7 @@ public class Map {
 		}
 	}
 	
+	// Sets all tiles to the value of the current brush
 	public void reset(String brush){
 		for(int i = 0; i < this.width; i++){
 			for(int j = 0; j < this.height; j++){
@@ -68,6 +72,8 @@ public class Map {
 		this.animals.clear();
 	}
 	
+	// Places this Terrain object into this map
+	// Flags the previous items for deletion
 	public void setTile(Terrain newTile){
 		int x = (int)newTile.tile.getX() / this.tileWidth;
 		int y = (int)newTile.tile.getY() / this.tileHeight;
@@ -79,10 +85,12 @@ public class Map {
 		this.tiles[x][y] = newTile;
 	}
 	
+	// Adds food to the map
 	public void addFood(Food newFood){
 		this.foodPellets.add(newFood);
 	}
 	
+	// Adds an animal to the map
 	public void addAnimal(Animal newAnimal){
 		this.animals.add(newAnimal);
 	}

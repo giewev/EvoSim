@@ -12,6 +12,8 @@ public class Dirt extends Terrain {
 		this.tile.setId("toDraw");
 	}
 	
+	// Draws the Dirt to the screen if it is flagged for drawing
+	// The Dirt is then unflagged and moved to the back
 	@Override
 	public void draw(Group screen) {
 		if(this.tile.getId() != "toDraw") return;

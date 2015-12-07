@@ -11,6 +11,8 @@ public class Stone extends Terrain {
 		this.tile.setId("toDraw");
 	}
 	
+	// Draws the Stone to the screen if it is flagged for drawing
+	// The Stone is then unflagged and moved to the back
 	@Override
 	public void draw(Group screen) {
 		if(this.tile.getId() != "toDraw") return;

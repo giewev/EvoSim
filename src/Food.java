@@ -13,6 +13,8 @@ public class Food {
 		this.pellet.setId("toDraw");
 	}
 	
+	// Draws the Food to the screen if it is flagged for drawing
+	// The Food is then unflagged
 	public void draw(Group screen) {
 		if(this.pellet.getId() != "toDraw") return;
 		screen.getChildren().add(this.pellet);

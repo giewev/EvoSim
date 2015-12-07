@@ -63,6 +63,7 @@ public class EvoSim extends Application {
 		
 		drawControlMenu(root);
 		
+		// Defines the behavior on every game tick
 		EventHandler<ActionEvent> tick = e -> {
 			root.getChildren().removeIf(a -> {
 				return a.getId()!= null && a.getId().equals("toDelete");

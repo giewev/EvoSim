@@ -3,6 +3,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 public class Animal {
+	// Borders of the map the animals are in
 	public static int MinX;
 	public static int MinY;
 	public static int MaxX;
@@ -35,12 +36,17 @@ public class Animal {
 		home = newHome;
 	}
 	
+	// Draws this animal to the screen if it is flagged for drawing
+	// The animal will then be unflagged for drawing
 	public void draw(Group screen) {
 		if(this.body.getId() != "toDraw") return;
 		screen.getChildren().add(this.body);
 		this.body.setId("Animal");
 	}
 	
+	// Steers and moves the animal
+	// Will turn to either side if it can not continue on its path
+	// If it can not move in any direction safely, it will hold in place
 	public void tick(){
 		this.steer();
 		
@@ -58,6 +64,9 @@ public class Animal {
 		}
 	}
 	
+	// Steers the animal left or right if it can not continue straight
+	// Tries to turn as little as possible without hitting an obstacle
+	// If there is no safe path, no turn will be made
 	public void steer(){
 		double oldX = this.body.getCenterX();
 		double oldY = this.body.getCenterY();
@@ -110,10 +119,7 @@ public class Animal {
 		this.angle %= Math.PI * 2;
 	}
 	
-	private static double angleDiff(double a, double b){
-		return ((a - b + Math.PI) % (2 * Math.PI)) - Math.PI;
-	}
-	
+	// Returns true if this animal is intersecting or inside of stone
 	private boolean clippingWall(){
 		int left = (int)((this.body.getCenterX() - this.body.getRadius()) / home.tileWidth);
 		int right = (int)Math.ceil(((this.body.getCenterX() + this.body.getRadius()) / home.tileWidth));
@@ -136,6 +142,7 @@ public class Animal {
 		return false;
 	}
 	
+	// Returns true if this animal has part of its body outside the map
 	private boolean outsideBounds(){
 		return this.body.getCenterX() - this.body.getRadius() < MinX ||
 				this.body.getCenterX() + this.body.getRadius() > MaxX ||
