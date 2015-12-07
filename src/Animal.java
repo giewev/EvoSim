@@ -122,8 +122,8 @@ public class Animal {
 		
 		for(int i = left; i <= right; i++){
 			for(int j = up; j <= down; j++){
-				if(i < 0 || i > home.width) continue;
-				if(j < 0 || j > home.height) continue;
+				if(i < 0 || i >= home.width) continue;
+				if(j < 0 || j >= home.height) continue;
 				
 				if(home.tiles[i][j] instanceof Stone){
 					if(this.body.intersects(i * home.tileWidth, j * home.tileHeight, home.tileWidth, home.tileHeight)){
