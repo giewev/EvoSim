@@ -20,7 +20,7 @@ public class EvoSim extends Application {
 	
 	static String currentBrush = "Dirt";
 	
-	static Map tiles = new Map(mapWidth, mapHeight, tileSize);
+	static Map game = new Map(mapWidth, mapHeight, tileSize);
 	
 	public static void main(String[] args) {
 		launch(args);
@@ -31,6 +31,7 @@ public class EvoSim extends Application {
 		Group root = new Group();
 		Scene scene = new Scene(root, mapWidth * tileSize + 200, mapHeight * tileSize);
 		Animal.setGameCoordinates(0, 0, mapWidth * tileSize, mapHeight * tileSize);
+		Animal.setHome(game);
 		
 		// Defines how the GUI handles a mouse click or drag
 		EventHandler<MouseEvent> mouseHandler = e -> {
@@ -38,17 +39,17 @@ public class EvoSim extends Application {
 				int xIndex = (int)(e.getX() / tileSize);
 				int yIndex = (int)(e.getY() / tileSize);
 				
-				for(int x = xIndex - 1; x <= xIndex + 1; x++){
-					for(int y = yIndex - 1; y <= yIndex + 1; y++){
-						tiles.setTile(Terrain.construct(currentBrush, x * tileSize, y * tileSize, tileSize, tileSize));
+				for(int x = xIndex - 3; x <= xIndex + 3; x++){
+					for(int y = yIndex - 3; y <= yIndex + 3; y++){
+						game.setTile(Terrain.construct(currentBrush, x * tileSize, y * tileSize, tileSize, tileSize));
 					}
 				}
 			}
 			else if(e.getButton() == MouseButton.SECONDARY){
-				tiles.addFood(new Food((int)e.getX(), (int)e.getY(), 5));
+				game.addFood(new Food((int)e.getX(), (int)e.getY(), 5));
 			}
 			else{
-				tiles.addAnimal(new Animal((int)e.getX(), (int)e.getY(), 10, 5));
+				game.addAnimal(new Animal((int)e.getX(), (int)e.getY(), 10, 5));
 			}
 		};
 		
@@ -61,8 +62,8 @@ public class EvoSim extends Application {
 			root.getChildren().removeIf(a -> {
 				return a.getId()!= null && a.getId().equals("toDelete");
 			});
-			tiles.tick();
-			tiles.draw(root);
+			game.tick();
+			game.draw(root);
 		};
 		
 		final Timeline loop = new Timeline(new KeyFrame(Duration.millis(33), tick));
@@ -107,7 +108,7 @@ public class EvoSim extends Application {
 		resetButton.setText("Reset Map");
 		resetButton.setId("controlMenu");
 		resetButton.setOnMouseClicked(e -> {
-			tiles.resetStone();
+			game.resetStone();
 		});
 		
 		screen.getChildren().add(dirtButton);
