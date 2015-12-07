@@ -111,7 +111,6 @@ public class Animal {
 					this.angle = rightAngle;
 				}
 				
-				System.out.println("Turning");
 				return;
 			}
 		}

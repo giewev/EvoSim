@@ -17,7 +17,7 @@ import javafx.util.Duration;
 
 public class EvoSim extends Application {
 	final static int tileSize = 10;
-	final static int mapWidth = 60;
+	final static int mapWidth = 80;
 	final static int mapHeight = 40;
 	
 	static String currentBrush = "Dirt";
