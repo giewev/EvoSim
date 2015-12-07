@@ -144,7 +144,7 @@ public class EvoSim extends Application {
 		resetButton.setText("Reset Map");
 		resetButton.setId("controlMenu");
 		resetButton.setOnMouseClicked(e -> {
-			game.resetStone();
+			game.reset(currentBrush);
 		});
 		
 		// Initialize the brush size slider

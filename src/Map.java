@@ -17,7 +17,7 @@ public class Map {
 		this.tileHeight = size;
 		this.tileWidth = size;
 		this.tiles = new Terrain[this.width][this.height];
-		this.resetStone();
+		this.reset("Stone");
 	}
 	
 	public void tick(){
@@ -50,10 +50,10 @@ public class Map {
 		}
 	}
 	
-	public void resetStone(){
+	public void reset(String brush){
 		for(int i = 0; i < this.width; i++){
 			for(int j = 0; j < this.height; j++){
-				this.setTile(new Stone(i * this.tileWidth, j * this.tileHeight, this.tileWidth, this.tileHeight));
+				this.setTile(Terrain.construct(brush, i * this.tileWidth, j * this.tileHeight, this.tileWidth, this.tileHeight));
 			}
 		}
 		
