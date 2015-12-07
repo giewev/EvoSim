@@ -7,6 +7,8 @@ import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -21,6 +23,7 @@ public class EvoSim extends Application {
 	static String currentBrush = "Dirt";
 	
 	static Map game = new Map(mapWidth, mapHeight, tileSize);
+	static Slider brushSize;
 	
 	public static void main(String[] args) {
 		launch(args);
@@ -39,8 +42,10 @@ public class EvoSim extends Application {
 				int xIndex = (int)(e.getX() / tileSize);
 				int yIndex = (int)(e.getY() / tileSize);
 				
-				for(int x = xIndex - 3; x <= xIndex + 3; x++){
-					for(int y = yIndex - 3; y <= yIndex + 3; y++){
+				int brushWidth = (int)(brushSize.getValue() - 1) / 2;
+				
+				for(int x = xIndex - brushWidth; x <= xIndex + brushWidth; x++){
+					for(int y = yIndex - brushWidth; y <= yIndex + brushWidth; y++){
 						game.setTile(Terrain.construct(currentBrush, x * tileSize, y * tileSize, tileSize, tileSize));
 					}
 				}
@@ -74,34 +79,65 @@ public class EvoSim extends Application {
 	}
 	
 	public static void drawControlMenu(Group screen){
+		// Initialize brush type buttons
 		Rectangle dirtButton = new Rectangle(mapWidth * tileSize + 30, 15, 50, 50);
 		dirtButton.setFill(Color.SADDLEBROWN);
 		dirtButton.setId("controlMenu");
-		dirtButton.setOnMousePressed(e -> {
-			currentBrush = "Dirt";
-		});
+		dirtButton.setStroke(Color.RED);
+		dirtButton.setStrokeWidth(2);
 		
 		Rectangle stoneButton = new Rectangle(mapWidth * tileSize + 90, 15, 50, 50);
 		stoneButton.setFill(Color.GREY);
 		stoneButton.setId("controlMenu");
-		stoneButton.setOnMousePressed(e -> {
-			currentBrush = "Stone";
-		});
+		stoneButton.setStroke(Color.RED);
+		stoneButton.setStrokeWidth(0);
 		
 		Rectangle waterButton = new Rectangle(mapWidth * tileSize + 30, 80, 50, 50);
 		waterButton.setFill(Color.BLUE);
 		waterButton.setId("controlMenu");
-		waterButton.setOnMousePressed(e -> {
-			currentBrush = "Water";
-		});
+		waterButton.setStroke(Color.RED);
+		waterButton.setStrokeWidth(0);
 		
 		Rectangle grassButton = new Rectangle(mapWidth * tileSize + 90, 80, 50, 50);
 		grassButton.setFill(Color.GREEN);
 		grassButton.setId("controlMenu");
+		grassButton.setStroke(Color.RED);
+		grassButton.setStrokeWidth(0);
+		
+		// Add click listeners to the brush type buttons
+		dirtButton.setOnMousePressed(e -> {
+			dirtButton.setStrokeWidth(2);
+			stoneButton.setStrokeWidth(0);
+			waterButton.setStrokeWidth(0);
+			grassButton.setStrokeWidth(0);
+			currentBrush = "Dirt";
+		});
+		
+		stoneButton.setOnMousePressed(e -> {
+			dirtButton.setStrokeWidth(0);
+			stoneButton.setStrokeWidth(2);
+			waterButton.setStrokeWidth(0);
+			grassButton.setStrokeWidth(0);
+			currentBrush = "Stone";
+		});
+		
+		waterButton.setOnMousePressed(e -> {
+			dirtButton.setStrokeWidth(0);
+			stoneButton.setStrokeWidth(0);
+			waterButton.setStrokeWidth(2);
+			grassButton.setStrokeWidth(0);
+			currentBrush = "Water";
+		});
+
 		grassButton.setOnMousePressed(e -> {
+			dirtButton.setStrokeWidth(0);
+			stoneButton.setStrokeWidth(0);
+			waterButton.setStrokeWidth(0);
+			grassButton.setStrokeWidth(2);
 			currentBrush = "Grass";
 		});
 		
+		// Initialize the reset button and listener
 		Button resetButton = new Button();
 		resetButton.setLayoutX(mapWidth * tileSize + 40);
 		resetButton.setLayoutY(160);
@@ -111,10 +147,31 @@ public class EvoSim extends Application {
 			game.resetStone();
 		});
 		
+		// Initialize the brush size slider
+		Label brushSizeLabel = new Label();
+		brushSizeLabel.setText("Brush Size");
+		brushSizeLabel.setLayoutX(mapWidth * tileSize + 60);
+		brushSizeLabel.setLayoutY(220);
+		
+		Slider brushSizeSlider = new Slider();
+		brushSizeSlider.setLayoutX(mapWidth * tileSize + 20);
+		brushSizeSlider.setLayoutY(240);
+		brushSizeSlider.setShowTickLabels(true);
+		brushSizeSlider.setShowTickMarks(true);
+		brushSizeSlider.setMajorTickUnit(2);
+		brushSizeSlider.setMinorTickCount(0);
+		brushSizeSlider.setSnapToTicks(true);
+		brushSizeSlider.setMax(9);
+		brushSizeSlider.setMin(1);
+		brushSize = brushSizeSlider;
+		
+		// Add our menu items to the screen
 		screen.getChildren().add(dirtButton);
 		screen.getChildren().add(stoneButton);
 		screen.getChildren().add(waterButton);
 		screen.getChildren().add(grassButton);
 		screen.getChildren().add(resetButton);
+		screen.getChildren().add(brushSizeLabel);
+		screen.getChildren().add(brushSizeSlider);
 	}
 }
