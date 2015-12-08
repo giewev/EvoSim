@@ -49,6 +49,8 @@ public class Animal {
 	// If it can not move in any direction safely, it will hold in place
 	public void tick(){
 		this.steer();
+		this.randomSteer(Math.PI / 16);
+		this.normalizeAngle();
 		
 		double oldX = this.body.getCenterX();
 		double oldY = this.body.getCenterY();
@@ -115,6 +117,16 @@ public class Animal {
 			}
 		}
 		
+		this.angle %= Math.PI * 2;
+	}
+	
+	// Gives some random variation to the Animal's direction
+	public void randomSteer(double max){
+		this.angle += (Math.random() * max * 2) - max;
+	}
+	
+	// Converts the angle to a value in [0, 2PI)
+	public void normalizeAngle(){
 		this.angle %= Math.PI * 2;
 	}
 	
