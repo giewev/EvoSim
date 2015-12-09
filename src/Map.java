@@ -25,6 +25,14 @@ public class Map {
 		for(Animal animal : animals){
 			animal.tick();
 		}
+		
+		this.animals.removeIf(e -> {
+			return e.body.getId().equals("toDelete");
+		});
+		
+		this.foodPellets.removeIf(e -> {
+			return e.pellet.getId().equals("toDelete");
+		});
 	}
 	
 	// Draws all of the game items if they have not already been drawn
@@ -87,6 +95,8 @@ public class Map {
 	
 	// Adds food to the map
 	public void addFood(Food newFood){
+		if(newFood.clippingOtherFood()) return;
+		
 		this.foodPellets.add(newFood);
 	}
 	

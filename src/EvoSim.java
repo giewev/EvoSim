@@ -35,6 +35,7 @@ public class EvoSim extends Application {
 		Scene scene = new Scene(root, mapWidth * tileSize + 200, mapHeight * tileSize);
 		Animal.setGameCoordinates(0, 0, mapWidth * tileSize, mapHeight * tileSize);
 		Animal.setHome(game);
+		Food.setHome(game);
 		
 		// Defines how the GUI handles a mouse click or drag
 		EventHandler<MouseEvent> mouseHandler = e -> {

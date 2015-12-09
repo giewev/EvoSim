@@ -14,7 +14,7 @@ public class Animal {
 	public Circle body;
 	public double speed;
 	public double angle;
-	public int energy;
+	public double energy;
 	
 	public Animal(int x, int y, int size, double speed){
 		this.body = new Circle(x, y, size);
@@ -65,6 +65,13 @@ public class Animal {
 		if(this.clippingWall() || this.outsideBounds() || this.hittingOtherAnimal()){
 			this.body.setCenterX(oldX);
 			this.body.setCenterY(oldY);
+		}
+		
+		this.eatFood();
+		
+		this.energy -= 0.1;
+		if(this.energy <= 0){
+			this.body.setId("toDelete");
 		}
 	}
 	
@@ -178,5 +185,18 @@ public class Animal {
 		}
 		
 		return false;
+	}
+	
+	public void eatFood(){
+		for(Food fruit : home.foodPellets){
+			double xDiff = this.body.getCenterX() - fruit.pellet.getCenterX();
+			double yDiff = this.body.getCenterY() - fruit.pellet.getCenterY();
+			double dist = Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
+			
+			if(dist < this.body.getRadius()){
+				this.energy += 10;
+				fruit.pellet.setId("toDelete");
+			}
+		}
 	}
 }
