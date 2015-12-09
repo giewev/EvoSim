@@ -14,6 +14,7 @@ public class Animal {
 	public Circle body;
 	public double speed;
 	public double angle;
+	public int energy;
 	
 	public Animal(int x, int y, int size, double speed){
 		this.body = new Circle(x, y, size);
@@ -23,6 +24,7 @@ public class Animal {
 		this.body.setId("toDraw");
 		this.speed = speed;
 		this.angle = Math.random() * Math.PI * 2;
+		this.energy = 50;
 	}
 	
 	public static void setGameCoordinates(int minX, int minY, int maxX, int maxY){
@@ -60,7 +62,7 @@ public class Animal {
 		this.body.setCenterX(this.body.getCenterX() + xDiff);
 		this.body.setCenterY(this.body.getCenterY() + yDiff);
 		
-		if(this.clippingWall() || this.outsideBounds()){
+		if(this.clippingWall() || this.outsideBounds() || this.hittingOtherAnimal()){
 			this.body.setCenterX(oldX);
 			this.body.setCenterY(oldY);
 		}
@@ -83,7 +85,7 @@ public class Animal {
 			this.body.setCenterX(oldX + xDiffLeft);
 			this.body.setCenterY(oldY + yDiffLeft);
 			
-			leftSafe = !(this.clippingWall() || this.outsideBounds());
+			leftSafe = !(this.clippingWall() || this.outsideBounds() || this.hittingOtherAnimal());
 			this.body.setCenterX(oldX);
 			this.body.setCenterY(oldY);
 			
@@ -93,7 +95,7 @@ public class Animal {
 			this.body.setCenterX(oldX + xDiffRight);
 			this.body.setCenterY(oldY + yDiffRight);
 			
-			rightSafe = !(this.clippingWall() || this.outsideBounds());
+			rightSafe = !(this.clippingWall() || this.outsideBounds() || this.hittingOtherAnimal());
 			this.body.setCenterX(oldX);
 			this.body.setCenterY(oldY);
 			
@@ -131,7 +133,7 @@ public class Animal {
 	}
 	
 	// Returns true if this animal is intersecting or inside of stone
-	private boolean clippingWall(){
+	public boolean clippingWall(){
 		int left = (int)((this.body.getCenterX() - this.body.getRadius()) / home.tileWidth);
 		int right = (int)Math.ceil(((this.body.getCenterX() + this.body.getRadius()) / home.tileWidth));
 		int up = (int)((this.body.getCenterY() - this.body.getRadius()) / home.tileHeight);
@@ -154,10 +156,27 @@ public class Animal {
 	}
 	
 	// Returns true if this animal has part of its body outside the map
-	private boolean outsideBounds(){
+	public boolean outsideBounds(){
 		return this.body.getCenterX() - this.body.getRadius() < MinX ||
 				this.body.getCenterX() + this.body.getRadius() > MaxX ||
 				this.body.getCenterY() - this.body.getRadius() < MinY ||
 				this.body.getCenterY() + this.body.getRadius() > MaxY;
+	}
+	
+	public boolean hittingOtherAnimal(){
+		for(Animal other : home.animals){
+			if(other == this) continue;
+			
+			double radSum = this.body.getRadius() + other.body.getRadius();
+			
+			double xDiff = this.body.getCenterX() - other.body.getCenterX();
+			if(xDiff > radSum)  continue;
+			double yDiff = this.body.getCenterY() - other.body.getCenterY();
+			if(yDiff > radSum) continue;
+			double distance = Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
+			if(distance < radSum) return true;
+		}
+		
+		return false;
 	}
 }

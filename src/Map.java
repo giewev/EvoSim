@@ -92,6 +92,10 @@ public class Map {
 	
 	// Adds an animal to the map
 	public void addAnimal(Animal newAnimal){
+		if(newAnimal.clippingWall()) return;
+		if(newAnimal.outsideBounds()) return;
+		if(newAnimal.hittingOtherAnimal()) return;
+		
 		this.animals.add(newAnimal);
 	}
 }
