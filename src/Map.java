@@ -31,7 +31,8 @@ public class Map {
 		});
 		
 		this.foodPellets.removeIf(e -> {
-			return e.pellet.getId().equals("toDelete");
+			return e.pellet.getId().equals("toDelete") || 
+					e.clippingStone();
 		});
 	}
 	
@@ -95,16 +96,18 @@ public class Map {
 	
 	// Adds food to the map
 	public void addFood(Food newFood){
-		if(newFood.clippingOtherFood()) return;
+		if(newFood.clippingFood()) return;
+		if(newFood.clippingStone()) return;
+		if(newFood.outsideMap()) return;
 		
 		this.foodPellets.add(newFood);
 	}
 	
 	// Adds an animal to the map
 	public void addAnimal(Animal newAnimal){
-		if(newAnimal.clippingWall()) return;
-		if(newAnimal.outsideBounds()) return;
-		if(newAnimal.hittingOtherAnimal()) return;
+		if(newAnimal.clippingStone()) return;
+		if(newAnimal.outsideMap()) return;
+		if(newAnimal.clippingAnimal()) return;
 		
 		this.animals.add(newAnimal);
 	}

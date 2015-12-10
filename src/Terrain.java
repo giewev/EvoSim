@@ -1,7 +1,7 @@
 import javafx.scene.Group;
 import javafx.scene.shape.Rectangle;
 
-public abstract class Terrain {
+public abstract class Terrain extends GameObject {
 	public Rectangle tile;
 	
 	public abstract void draw(Group screen);
@@ -14,5 +14,33 @@ public abstract class Terrain {
 		if(type.equals("Grass")) return new Grass(x, y, newWidth, newHeight);
 		
 		return null;
+	}
+	
+	public boolean clippingStone(){
+		return false;
+	}
+	
+	public boolean outsideMap(){
+		return false;
+	}
+	
+	public boolean clippingAnimal(){
+		for(Animal animal : home.animals){
+			if(animal.body.intersects(this.tile.getX(), this.tile.getY(), home.tileWidth, home.tileHeight)){
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public boolean clippingFood(){
+		for(Food fruit : home.foodPellets){
+			if(fruit.pellet.intersects(this.tile.getX(), this.tile.getY(), home.tileWidth, home.tileHeight)){
+				return true;
+			}
+		}
+		
+		return false;
 	}
 }

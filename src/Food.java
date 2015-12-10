@@ -2,14 +2,7 @@ import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
-public class Food {
-	public static int MinX;
-	public static int MinY;
-	public static int MaxX;
-	public static int MaxY;
-
-	public static Map home;
-	
+public class Food extends GameObject{
 	public Circle pellet;
 	
 	public Food(int x, int y, int size){
@@ -20,17 +13,6 @@ public class Food {
 		this.pellet.setId("toDraw");
 	}
 	
-	public static void setGameCoordinates(int minX, int minY, int maxX, int maxY){
-		MinX = minX;
-		MinY = minY;
-		MaxX = maxX;
-		MaxY = maxY;
-	}
-	
-	public static void setHome(Map newHome){
-		home = newHome;
-	}
-	
 	// Draws the Food to the screen if it is flagged for drawing
 	// The Food is then unflagged
 	public void draw(Group screen) {
@@ -39,7 +21,7 @@ public class Food {
 		this.pellet.setId("Food");
 	}
 	
-	public boolean clippingOtherFood(){
+	public boolean clippingFood(){
 		for(Food other : home.foodPellets){
 			if(other == this) continue;
 			
@@ -48,6 +30,51 @@ public class Food {
 			double xDiff = this.pellet.getCenterX() - other.pellet.getCenterX();
 			if(xDiff > radSum)  continue;
 			double yDiff = this.pellet.getCenterY() - other.pellet.getCenterY();
+			if(yDiff > radSum) continue;
+			double distance = Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
+			if(distance < radSum) return true;
+		}
+		
+		return false;
+	}
+	
+	public boolean clippingStone(){
+		int left = (int)((this.pellet.getCenterX() - this.pellet.getRadius()) / home.tileWidth);
+		int right = (int)Math.ceil(((this.pellet.getCenterX() + this.pellet.getRadius()) / home.tileWidth));
+		int up = (int)((this.pellet.getCenterY() - this.pellet.getRadius()) / home.tileHeight);
+		int down = (int)Math.ceil(((this.pellet.getCenterY() + this.pellet.getRadius()) / home.tileHeight));
+		
+		for(int i = left; i <= right; i++){
+			for(int j = up; j <= down; j++){
+				if(i < 0 || i >= home.width) continue;
+				if(j < 0 || j >= home.height) continue;
+				
+				if(home.tiles[i][j] instanceof Stone){
+					if(this.pellet.intersects(i * home.tileWidth, j * home.tileHeight, home.tileWidth, home.tileHeight)){
+						this.pellet.setId("toDelete");
+						return true;
+					}
+				}
+			}
+		}
+		
+		return false;
+	}
+	
+	public boolean outsideMap(){
+		return this.pellet.getCenterX() - this.pellet.getRadius() < MinX ||
+				this.pellet.getCenterX() + this.pellet.getRadius() > MaxX ||
+				this.pellet.getCenterY() - this.pellet.getRadius() < MinY ||
+				this.pellet.getCenterY() + this.pellet.getRadius() > MaxY;
+	}
+	
+	public boolean clippingAnimal(){
+		for(Animal other : home.animals){
+			double radSum = this.pellet.getRadius() + other.body.getRadius();
+			
+			double xDiff = this.pellet.getCenterX() - other.body.getCenterX();
+			if(xDiff > radSum)  continue;
+			double yDiff = this.pellet.getCenterY() - other.body.getCenterY();
 			if(yDiff > radSum) continue;
 			double distance = Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
 			if(distance < radSum) return true;

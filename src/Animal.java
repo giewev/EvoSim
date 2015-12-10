@@ -2,15 +2,7 @@ import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
-public class Animal {
-	// Borders of the map the animals are in
-	public static int MinX;
-	public static int MinY;
-	public static int MaxX;
-	public static int MaxY;
-
-	public static Map home;
-	
+public class Animal extends GameObject{
 	public Circle body;
 	public double speed;
 	public double angle;
@@ -25,17 +17,6 @@ public class Animal {
 		this.speed = speed;
 		this.angle = Math.random() * Math.PI * 2;
 		this.energy = 50;
-	}
-	
-	public static void setGameCoordinates(int minX, int minY, int maxX, int maxY){
-		MinX = minX;
-		MinY = minY;
-		MaxX = maxX;
-		MaxY = maxY;
-	}
-	
-	public static void setHome(Map newHome){
-		home = newHome;
 	}
 	
 	// Draws this animal to the screen if it is flagged for drawing
@@ -62,7 +43,7 @@ public class Animal {
 		this.body.setCenterX(this.body.getCenterX() + xDiff);
 		this.body.setCenterY(this.body.getCenterY() + yDiff);
 		
-		if(this.clippingWall() || this.outsideBounds() || this.hittingOtherAnimal()){
+		if(this.clippingStone() || this.outsideMap() || this.clippingAnimal()){
 			this.body.setCenterX(oldX);
 			this.body.setCenterY(oldY);
 		}
@@ -92,7 +73,7 @@ public class Animal {
 			this.body.setCenterX(oldX + xDiffLeft);
 			this.body.setCenterY(oldY + yDiffLeft);
 			
-			leftSafe = !(this.clippingWall() || this.outsideBounds() || this.hittingOtherAnimal());
+			leftSafe = !(this.clippingStone() || this.outsideMap() || this.clippingAnimal());
 			this.body.setCenterX(oldX);
 			this.body.setCenterY(oldY);
 			
@@ -102,7 +83,7 @@ public class Animal {
 			this.body.setCenterX(oldX + xDiffRight);
 			this.body.setCenterY(oldY + yDiffRight);
 			
-			rightSafe = !(this.clippingWall() || this.outsideBounds() || this.hittingOtherAnimal());
+			rightSafe = !(this.clippingStone() || this.outsideMap() || this.clippingAnimal());
 			this.body.setCenterX(oldX);
 			this.body.setCenterY(oldY);
 			
@@ -140,7 +121,7 @@ public class Animal {
 	}
 	
 	// Returns true if this animal is intersecting or inside of stone
-	public boolean clippingWall(){
+	public boolean clippingStone(){
 		int left = (int)((this.body.getCenterX() - this.body.getRadius()) / home.tileWidth);
 		int right = (int)Math.ceil(((this.body.getCenterX() + this.body.getRadius()) / home.tileWidth));
 		int up = (int)((this.body.getCenterY() - this.body.getRadius()) / home.tileHeight);
@@ -163,14 +144,14 @@ public class Animal {
 	}
 	
 	// Returns true if this animal has part of its body outside the map
-	public boolean outsideBounds(){
+	public boolean outsideMap(){
 		return this.body.getCenterX() - this.body.getRadius() < MinX ||
 				this.body.getCenterX() + this.body.getRadius() > MaxX ||
 				this.body.getCenterY() - this.body.getRadius() < MinY ||
 				this.body.getCenterY() + this.body.getRadius() > MaxY;
 	}
 	
-	public boolean hittingOtherAnimal(){
+	public boolean clippingAnimal(){
 		for(Animal other : home.animals){
 			if(other == this) continue;
 			
@@ -198,5 +179,19 @@ public class Animal {
 				fruit.pellet.setId("toDelete");
 			}
 		}
+	}
+	
+	public boolean clippingFood(){
+		for(Food fruit : home.foodPellets){
+			double xDiff = this.body.getCenterX() - fruit.pellet.getCenterX();
+			double yDiff = this.body.getCenterY() - fruit.pellet.getCenterY();
+			double dist = Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
+			
+			if(dist < this.body.getRadius() + fruit.pellet.getRadius()){
+				return true;
+			}
+		}
+		
+		return false;
 	}
 }
