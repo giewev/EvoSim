@@ -11,6 +11,8 @@ public class Map {
 	public int tileWidth;
 	public int tileHeight;
 	
+	private static final double foodChance = 0.001;
+	
 	public Map(int newWidth, int newHeight, int size){
 		this.width = newWidth;
 		this.height = newHeight;
@@ -24,6 +26,18 @@ public class Map {
 	public void tick(){
 		for(Animal animal : animals){
 			animal.tick();
+		}
+		
+		for(int i = 0; i < this.width; i++){
+			for(int j = 0; j < this.height; j++){
+				if(this.tiles[i][j] instanceof Grass){
+					if(Math.random() < foodChance){
+						int x = (int)(Math.random() * this.tileWidth) + (i * this.tileWidth);
+						int y = (int)(Math.random() * this.tileHeight) + (j * this.tileHeight);
+						this.addFood(x, y, 2);
+					}
+				}
+			}
 		}
 		
 		this.animals.removeIf(e -> {
@@ -101,6 +115,14 @@ public class Map {
 		if(newFood.outsideMap()) return;
 		
 		this.foodPellets.add(newFood);
+	}
+	
+	public void addFood(int x, int y){
+		this.addFood(new Food(x, y, 5));
+	}
+	
+	public void addFood(int x, int y, int size){
+		this.addFood(new Food(x, y, size));
 	}
 	
 	// Adds an animal to the map

@@ -54,7 +54,7 @@ public class EvoSim extends Application {
 				game.addFood(new Food((int)e.getX(), (int)e.getY(), 5));
 			}
 			else{
-				game.addAnimal(new Animal((int)e.getX(), (int)e.getY(), 10, 5));
+				game.addAnimal(new Animal((int)e.getX(), (int)e.getY(), 5, 5));
 			}
 		};
 		

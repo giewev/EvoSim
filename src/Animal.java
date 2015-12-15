@@ -16,7 +16,7 @@ public class Animal extends GameObject{
 		this.body.setId("toDraw");
 		this.speed = speed;
 		this.angle = Math.random() * Math.PI * 2;
-		this.energy = 50;
+		this.energy = 20;
 	}
 	
 	// Draws this animal to the screen if it is flagged for drawing
@@ -175,7 +175,7 @@ public class Animal extends GameObject{
 			double dist = Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
 			
 			if(dist < this.body.getRadius()){
-				this.energy += 10;
+				this.energy += 3;
 				fruit.pellet.setId("toDelete");
 			}
 		}
