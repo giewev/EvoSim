@@ -50,7 +50,7 @@ public class Animal extends GameObject{
 		
 		this.eatFood();
 		
-		this.energy -= 0.1;
+		this.energy -= (this.speed / 100.0) + (this.body.getRadius() / 100.0);
 		if(this.energy <= 0){
 			this.body.setId("toDelete");
 		}
