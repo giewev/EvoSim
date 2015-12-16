@@ -24,8 +24,10 @@ public class Map {
 	
 	// Moves the animals according to their internal logic
 	public void tick(){
-		for(Animal animal : animals){
-			animal.tick();
+		// DO NOT REPLACE WITH SMART LOOP.
+		// Tick can modify the array list which causes an exception when iterating
+		for(int i = 0; i < animals.size(); i++){
+			animals.get(i).tick();
 		}
 		
 		for(int i = 0; i < this.width; i++){
@@ -126,11 +128,12 @@ public class Map {
 	}
 	
 	// Adds an animal to the map
-	public void addAnimal(Animal newAnimal){
-		if(newAnimal.clippingStone()) return;
-		if(newAnimal.outsideMap()) return;
-		if(newAnimal.clippingAnimal()) return;
+	public boolean addAnimal(Animal newAnimal){
+		if(newAnimal.clippingStone()) return false;
+		if(newAnimal.outsideMap()) return false;
+		if(newAnimal.clippingAnimal()) return false;
 		
 		this.animals.add(newAnimal);
+		return true;
 	}
 }

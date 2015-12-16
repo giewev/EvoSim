@@ -54,6 +54,10 @@ public class Animal extends GameObject{
 		if(this.energy <= 0){
 			this.body.setId("toDelete");
 		}
+		
+		if(this.energy > 40){
+			this.split();
+		}
 	}
 	
 	// Steers the animal left or right if it can not continue straight
@@ -166,6 +170,19 @@ public class Animal extends GameObject{
 		}
 		
 		return false;
+	}
+	
+	public void split(){
+		Animal newAnimal = new Animal(0, 0, (int)this.body.getRadius(), this.speed);
+		newAnimal.energy = this.energy / 2.0;
+		for(double splitAngle = 0; splitAngle < Math.PI * 2; splitAngle += Math.PI / 4.0){
+			newAnimal.body.setCenterX(this.body.getCenterX() + 2.5 * this.body.getRadius() * Math.cos(splitAngle));
+			newAnimal.body.setCenterY(this.body.getCenterY() + 2.5 * this.body.getRadius() * Math.sin(splitAngle));
+			if(home.addAnimal(newAnimal)){
+				this.energy /= 2.0;
+				return;
+			}
+		}
 	}
 	
 	public void eatFood(){

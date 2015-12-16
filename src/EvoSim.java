@@ -51,7 +51,7 @@ public class EvoSim extends Application {
 				}
 			}
 			else if(e.getButton() == MouseButton.SECONDARY){
-				game.addFood(new Food((int)e.getX(), (int)e.getY(), 5));
+				game.addFood(new Food((int)e.getX(), (int)e.getY(), 2));
 			}
 			else{
 				game.addAnimal(new Animal((int)e.getX(), (int)e.getY(), 5, 5));
