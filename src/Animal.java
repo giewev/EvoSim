@@ -8,7 +8,7 @@ public class Animal extends GameObject{
 	public double angle;
 	public double energy;
 	
-	public Animal(int x, int y, int size, double speed){
+	public Animal(int x, int y, double size, double speed){
 		this.body = new Circle(x, y, size);
 		this.body.setStroke(Color.BLACK);
 		this.body.setStrokeWidth(0.2);
@@ -151,6 +151,7 @@ public class Animal extends GameObject{
 				this.body.getCenterY() + this.body.getRadius() > MaxY;
 	}
 	
+	// Returns true if this animal has part of its body overlapping with part of another animal
 	public boolean clippingAnimal(){
 		for(Animal other : home.animals){
 			if(other == this) continue;
@@ -168,6 +169,7 @@ public class Animal extends GameObject{
 		return false;
 	}
 	
+	// Eats any food that this animal is enveloping
 	public void eatFood(){
 		for(Food fruit : home.foodPellets){
 			double xDiff = this.body.getCenterX() - fruit.pellet.getCenterX();
@@ -181,6 +183,7 @@ public class Animal extends GameObject{
 		}
 	}
 	
+	// Returns true if this animal is overlapping with any food pellets
 	public boolean clippingFood(){
 		for(Food fruit : home.foodPellets){
 			double xDiff = this.body.getCenterX() - fruit.pellet.getCenterX();
@@ -193,5 +196,20 @@ public class Animal extends GameObject{
 		}
 		
 		return false;
+	}
+	
+	// Creates a new animal with slightly mutated size and speed
+	public Animal mutatedOffspring(){
+		double newSize = this.body.getRadius();
+		double sizeMutation = 2 * (Math.random() - 0.5);
+		newSize -= sizeMutation;
+		if(newSize < 1) newSize = 1;
+		
+		double newSpeed = this.speed;
+		double speedMutation = 2 * (Math.random() - 0.5);
+		newSpeed -= speedMutation;
+		if(newSpeed < 1) newSpeed = 1;
+		
+		return new Animal(0, 0, newSize, newSpeed);
 	}
 }
