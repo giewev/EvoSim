@@ -58,6 +58,35 @@ public class Animal extends GameObject{
 		}
 	}
 	
+	public void hunt(){
+		final double maximumDistance = this.speed * 25;
+		Animal bestAnimalTarget = null;
+		double animalDistance = maximumDistance;
+		Food bestFoodTarget = null;
+		double foodDistance = maximumDistance;
+		
+		for(Animal other : home.animals){
+			// Don't hunt animals that we can't eat
+			if(other.body.getRadius() > this.body.getRadius() * 0.60){
+				continue;
+			}
+			
+			double dist = this.distanceTo(other);
+			if(dist < animalDistance){
+				animalDistance = dist;
+				bestAnimalTarget = other;
+			}
+		}
+		
+		for(Food food : home.foodPellets){
+			double dist = this.distanceTo(food);
+			if(dist < foodDistance){
+				animalDistance = dist;
+				bestFoodTarget = food;
+			}
+		}
+	}
+	
 	// Steers the animal left or right if it can not continue straight
 	// Tries to turn as little as possible without hitting an obstacle
 	// If there is no safe path, no turn will be made
@@ -222,5 +251,17 @@ public class Animal extends GameObject{
 		offspring.aquaticness = newAquaticness;
 		
 		return offspring;
+	}
+	
+	public double distanceTo(Animal other){
+		double xDiff = other.body.getCenterX() - this.body.getCenterX();
+		double yDiff = other.body.getCenterY() - this.body.getCenterY();
+		return Math.sqrt((xDiff * xDiff) + (yDiff * yDiff));
+	}
+	
+	public double distanceTo(Food food){
+		double xDiff = food.pellet.getCenterX() - this.body.getCenterX();
+		double yDiff = food.pellet.getCenterY() - this.body.getCenterY();
+		return Math.sqrt((xDiff * xDiff) + (yDiff * yDiff));
 	}
 }
