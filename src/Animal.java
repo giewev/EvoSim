@@ -7,6 +7,7 @@ public class Animal extends GameObject{
 	public double speed;
 	public double angle;
 	public double energy;
+	public double aquaticness;
 	
 	public Animal(int x, int y, double size, double speed){
 		this.body = new Circle(x, y, size);
@@ -17,6 +18,7 @@ public class Animal extends GameObject{
 		this.speed = speed;
 		this.angle = Math.random() * Math.PI * 2;
 		this.energy = 50;
+		this.aquaticness = Math.random();
 	}
 	
 	// Draws this animal to the screen if it is flagged for drawing
@@ -198,7 +200,7 @@ public class Animal extends GameObject{
 		return false;
 	}
 	
-	// Creates a new animal with slightly mutated size and speed
+	// Creates a new animal with slightly mutated size, speed, and aquaticness
 	public Animal mutatedOffspring(){
 		double newSize = this.body.getRadius();
 		double sizeMutation = 2 * (Math.random() - 0.5);
@@ -210,6 +212,15 @@ public class Animal extends GameObject{
 		newSpeed -= speedMutation;
 		if(newSpeed < 1) newSpeed = 1;
 		
-		return new Animal(0, 0, newSize, newSpeed);
+		double newAquaticness = this.aquaticness;
+		double aquaticnessMutation = (Math.random() - 0.5) / 5.0;
+		newAquaticness += aquaticnessMutation;
+		if(newAquaticness < 0) newAquaticness = 0;
+		if(newAquaticness > 0) newAquaticness = 1;
+		
+		Animal offspring = new Animal(0, 0, newSize, newSpeed);
+		offspring.aquaticness = newAquaticness;
+		
+		return offspring;
 	}
 }
