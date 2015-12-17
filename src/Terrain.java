@@ -20,6 +20,10 @@ public abstract class Terrain extends GameObject {
 		return false;
 	}
 	
+	public boolean clippingWater(){
+		return false;
+	}
+	
 	public boolean outsideMap(){
 		return false;
 	}

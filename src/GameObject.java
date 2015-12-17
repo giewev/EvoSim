@@ -23,4 +23,5 @@ public abstract class GameObject {
 	public abstract boolean clippingAnimal();
 	public abstract boolean clippingStone();
 	public abstract boolean outsideMap();
+	public abstract boolean clippingWater();
 }

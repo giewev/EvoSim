@@ -61,6 +61,29 @@ public class Food extends GameObject{
 		return false;
 	}
 	
+	public boolean clippingWater(){
+		int left = (int)((this.pellet.getCenterX() - this.pellet.getRadius()) / home.tileWidth);
+		int right = (int)Math.ceil(((this.pellet.getCenterX() + this.pellet.getRadius()) / home.tileWidth));
+		int up = (int)((this.pellet.getCenterY() - this.pellet.getRadius()) / home.tileHeight);
+		int down = (int)Math.ceil(((this.pellet.getCenterY() + this.pellet.getRadius()) / home.tileHeight));
+		
+		for(int i = left; i <= right; i++){
+			for(int j = up; j <= down; j++){
+				if(i < 0 || i >= home.width) continue;
+				if(j < 0 || j >= home.height) continue;
+				
+				if(home.tiles[i][j] instanceof Water){
+					if(this.pellet.intersects(i * home.tileWidth, j * home.tileHeight, home.tileWidth, home.tileHeight)){
+						this.pellet.setId("toDelete");
+						return true;
+					}
+				}
+			}
+		}
+		
+		return false;
+	}
+	
 	public boolean outsideMap(){
 		return this.pellet.getCenterX() - this.pellet.getRadius() < MinX ||
 				this.pellet.getCenterX() + this.pellet.getRadius() > MaxX ||

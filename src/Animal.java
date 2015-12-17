@@ -40,6 +40,11 @@ public class Animal extends GameObject{
 		
 		double yDiff = Math.sin(this.angle) * speed;
 		double xDiff = Math.cos(this.angle) * speed;
+		if(this.clippingWater()){
+			xDiff /= 2.0;
+			yDiff /= 2.0;
+		}
+		
 		this.body.setCenterX(this.body.getCenterX() + xDiff);
 		this.body.setCenterY(this.body.getCenterY() + yDiff);
 		
@@ -146,6 +151,29 @@ public class Animal extends GameObject{
 		
 		return false;
 	}
+	
+	// Returns true if this animal is intersecting or inside of water
+		public boolean clippingWater(){
+			int left = (int)((this.body.getCenterX() - this.body.getRadius()) / home.tileWidth);
+			int right = (int)Math.ceil(((this.body.getCenterX() + this.body.getRadius()) / home.tileWidth));
+			int up = (int)((this.body.getCenterY() - this.body.getRadius()) / home.tileHeight);
+			int down = (int)Math.ceil(((this.body.getCenterY() + this.body.getRadius()) / home.tileHeight));
+			
+			for(int i = left; i <= right; i++){
+				for(int j = up; j <= down; j++){
+					if(i < 0 || i >= home.width) continue;
+					if(j < 0 || j >= home.height) continue;
+					
+					if(home.tiles[i][j] instanceof Water){
+						if(this.body.intersects(i * home.tileWidth, j * home.tileHeight, home.tileWidth, home.tileHeight)){
+							return true;
+						}
+					}
+				}
+			}
+			
+			return false;
+		}
 	
 	// Returns true if this animal has part of its body outside the map
 	public boolean outsideMap(){
